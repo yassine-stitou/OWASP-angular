@@ -1,0 +1,46 @@
+<header class="app-header">
+  <div class="header-left">
+    <div class="logo">
+      <span class="logo-icon">🛡️</span>
+      <div class="logo-text">
+        <h1>OWASP ASVS</h1>
+        <span class="logo-sub">Security Verification Checker</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <div class="score-ring">
+      <svg viewBox="0 0 42 42" class="ring-svg">
+        <circle class="ring-bg" cx="21" cy="21" r="15.915" />
+        <circle
+          class="ring-progress"
+          cx="21" cy="21" r="15.915"
+          [style.stroke-dasharray]="percentage + ' ' + (100 - percentage)"
+          [class.excellent]="percentage >= 80"
+          [class.good]="percentage >= 50 && percentage < 80"
+          [class.fair]="percentage >= 25 && percentage < 50"
+          [class.poor]="percentage < 25"
+        />
+      </svg>
+      <div class="ring-label">
+        <span class="ring-pct">{{ percentage }}%</span>
+        <span class="ring-sub">compliant</span>
+      </div>
+    </div>
+    <div class="stats">
+      <span class="stat-item">
+        <strong>{{ checkedCount }}</strong> / {{ totalCount }} verified
+      </span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <button class="btn-save" (click)="saveClicked.emit()">
+      <span>💾</span> Save Progress
+    </button>
+    <button class="btn-reset" (click)="resetClicked.emit()">
+      <span>🔄</span> Reset
+    </button>
+  </div>
+</header>

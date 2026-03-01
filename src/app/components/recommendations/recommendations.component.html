@@ -1,0 +1,116 @@
+<div class="recommendations-panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <span class="panel-icon">🤖</span>
+      <div>
+        <h2>AI Security Recommendations</h2>
+        <p>Get actionable guidance for your missing controls</p>
+      </div>
+    </div>
+    <div class="missing-summary">
+      <span class="missing-badge">{{ missingCount }} controls missing</span>
+    </div>
+  </div>
+
+  
+  <div class="provider-section">
+    <label class="section-label">AI Provider</label>
+    <div class="provider-tabs">
+      <button
+        *ngFor="let p of providers"
+        class="provider-tab"
+        [class.active]="selectedProvider === p.id"
+        (click)="selectedProvider = p.id; apiKey = ''; error = ''; recommendations = []"
+      >
+        <span class="provider-dot" [class]="p.id"></span>
+        {{ p.label }}
+      </button>
+    </div>
+  </div>
+
+  
+  <div class="api-key-row">
+    <div class="api-key-input">
+      <input
+        type="password"
+        [(ngModel)]="apiKey"
+        [placeholder]="currentProvider.keyPlaceholder"
+        (keyup.enter)="getRecommendations()"
+      />
+    </div>
+    <button class="btn-json" (click)="generateJSON()">
+      <span>📄</span> Export JSON
+    </button>
+    <button class="btn-ai" (click)="getRecommendations()" [disabled]="isLoading || missingCount === 0">
+      <span *ngIf="!isLoading">✨</span>
+      <span class="spinner" *ngIf="isLoading">⏳</span>
+      {{ isLoading ? loadingMessage : 'Get Recommendations' }}
+    </button>
+  </div>
+
+  
+  <div class="error-card" *ngIf="error">
+    <span>⚠️</span>
+    <span [innerHTML]="error"></span>
+  </div>
+
+  
+  <div class="recommendations-list" *ngIf="recommendations.length > 0">
+    <div class="rec-list-header">
+      <span>Showing top {{ recommendations.length }} missing controls (prioritized by level)</span>
+    </div>
+    <div class="rec-card" *ngFor="let rec of recommendations; let i = index">
+      <div class="rec-header">
+        <div class="rec-id-section">
+          <span class="rec-index">{{ i + 1 }}</span>
+          <div>
+            <span class="rec-id">{{ rec.requirement_id }}</span>
+            <p class="rec-desc">{{ rec.description }}</p>
+          </div>
+        </div>
+        <span class="priority-badge"
+          [style.background]="getPriorityColor(rec.priority) + '22'"
+          [style.color]="getPriorityColor(rec.priority)"
+          [style.border]="'1px solid ' + getPriorityColor(rec.priority) + '44'">
+          {{ rec.priority }}
+        </span>
+      </div>
+      <div class="rec-body">
+        <div class="rec-section">
+          <h4>📌 What to Implement</h4>
+          <p>{{ rec.what_to_implement }}</p>
+        </div>
+        <div class="rec-section">
+          <h4>🛠️ How to Implement</h4>
+          <p>{{ rec.how_to_implement }}</p>
+        </div>
+        <div class="rec-section" *ngIf="rec.best_practices?.length">
+          <h4>✅ Best Practices</h4>
+          <ul>
+            <li *ngFor="let bp of rec.best_practices">{{ bp }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="empty-state" *ngIf="!isLoading && recommendations.length === 0 && !error">
+    <div class="empty-icon">🛡️</div>
+    <h3>Ready to Analyze</h3>
+    <p>Select a provider, enter your API key, and click "Get Recommendations" to receive personalized security guidance.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showJsonModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>📄 Missing Controls JSON</h3>
+      <div class="modal-actions">
+        <button class="btn-copy" (click)="copyJson()">📋 Copy</button>
+        <button class="btn-close" (click)="closeModal()">✕</button>
+      </div>
+    </div>
+    <pre class="json-preview">{{ missingJson }}</pre>
+  </div>
+</div>

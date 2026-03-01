@@ -1,0 +1,88 @@
+<div class="checklist-container">
+  <div class="category-list">
+    <div class="category-item" *ngFor="let cat of categories">
+      <!-- Category Header -->
+      <div class="category-header" (click)="toggleCategory(cat.id)">
+        <div class="category-title">
+          <span class="cat-icon">{{ getCategoryIcon(cat.id) }}</span>
+          <div class="cat-info">
+            <span class="cat-id">{{ cat.id }}</span>
+            <span class="cat-name">{{ cat.name }}</span>
+          </div>
+        </div>
+        <div class="category-meta">
+          <div class="cat-progress-bar">
+            <div class="cat-fill" [style.width.%]="getCategoryProgress(cat.id)"></div>
+          </div>
+          <span class="cat-score">
+            {{ getCategoryScore(cat.id).checked }}/{{ getCategoryScore(cat.id).total }}
+          </span>
+          <button class="check-all-btn" (click)="$event.stopPropagation(); toggleAllInCategory(cat.id, true)">
+            ✓ All
+          </button>
+          <button class="uncheck-all-btn" (click)="$event.stopPropagation(); toggleAllInCategory(cat.id, false)">
+            ✗
+          </button>
+          <span class="expand-icon" [class.expanded]="isCategoryExpanded(cat.id)">▼</span>
+        </div>
+      </div>
+
+      <!-- Category Body -->
+      <div class="category-body" [class.expanded]="isCategoryExpanded(cat.id)">
+        <div class="section-list" *ngFor="let section of cat.sections">
+          <!-- Section Header -->
+          <div class="section-header" (click)="toggleSection(section.id)">
+            <div class="section-title">
+              <span class="sec-id">{{ section.id }}</span>
+              <span class="sec-name">{{ section.name }}</span>
+            </div>
+            <div class="section-meta">
+              <span class="sec-count">
+                {{ getCheckedInSection(section) }}/{{ getVisibleRequirementsCount(section) }}
+              </span>
+              <span class="expand-icon-sm" [class.expanded]="isSectionExpanded(section.id)">▼</span>
+            </div>
+          </div>
+
+          <!-- Requirements List -->
+          <div class="requirements-list" [class.expanded]="isSectionExpanded(section.id)">
+            <div
+              class="requirement-item"
+              *ngFor="let req of section.requirements"
+              [class.hidden]="!isReqVisible(req.level)"
+              [class.checked]="req.checked"
+            >
+              <label class="req-label">
+                <div class="checkbox-wrap">
+                  <input
+                    type="checkbox"
+                    [checked]="req.checked"
+                    (change)="onRequirementToggle(req.id, $any($event.target).checked)"
+                  />
+                  <span class="checkmark"></span>
+                </div>
+                <div class="req-content">
+                  <div class="req-header">
+                    <span class="req-id">{{ req.id }}</span>
+                    <div class="req-badges">
+                      <span
+                        class="level-badge"
+                        *ngFor="let lvl of req.level"
+                        [class.l1]="lvl === 1"
+                        [class.l2]="lvl === 2"
+                        [class.l3]="lvl === 3"
+                        [class.inactive]="!activeLevels.includes(lvl)"
+                      >L{{ lvl }}</span>
+                      <span class="cwe-badge" *ngIf="req.cwe">CWE-{{ req.cwe }}</span>
+                    </div>
+                  </div>
+                  <p class="req-description">{{ req.description }}</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

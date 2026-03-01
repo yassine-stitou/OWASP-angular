@@ -1,0 +1,91 @@
+<div class="app-wrapper">
+  <!-- Header -->
+  <app-header
+    [percentage]="score.percentage"
+    [checkedCount]="score.checked"
+    [totalCount]="score.total"
+    (saveClicked)="onSave()"
+    (resetClicked)="onReset()"
+  ></app-header>
+
+  <!-- Score Card -->
+  <app-score-card [score]="score"></app-score-card>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button
+        class="tab"
+        [class.active]="activeTab === 'checklist'"
+        (click)="activeTab = 'checklist'"
+      >
+        📋 Checklist
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab === 'recommendations'"
+        (click)="activeTab = 'recommendations'"
+      >
+        🤖 AI Recommendations
+        <span class="tab-badge" *ngIf="missingCount > 0">{{ missingCount }}</span>
+      </button>
+    </div>
+
+    <!-- Level Filters -->
+    <div class="level-filters" *ngIf="activeTab === 'checklist'">
+      <button
+        class="level-btn l1"
+        [class.active]="activeLevels.includes(1)"
+        (click)="onLevelToggle(1)"
+      >L1 Basic</button>
+      <button
+        class="level-btn l2"
+        [class.active]="activeLevels.includes(2)"
+        (click)="onLevelToggle(2)"
+      >L2 Standard</button>
+      <button
+        class="level-btn l3"
+        [class.active]="activeLevels.includes(3)"
+        (click)="onLevelToggle(3)"
+      >L3 Advanced</button>
+    </div>
+
+    <!-- Search and bulk actions -->
+    <div class="toolbar-right" *ngIf="activeTab === 'checklist'">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search requirements, IDs, CWE..."
+        />
+        <button *ngIf="searchQuery" (click)="searchQuery = ''; onSearchChange()" class="clear-btn">✕</button>
+      </div>
+      <button class="btn-bulk" (click)="onSelectAll()">✓ All</button>
+      <button class="btn-bulk deselect" (click)="onDeselectAll()">✗ All</button>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <app-checklist
+      *ngIf="activeTab === 'checklist'"
+      [categories]="filteredCategories"
+      [activeLevels]="activeLevels"
+      [scoreByCategory]="score.byCategory"
+    ></app-checklist>
+
+    <app-recommendations
+      *ngIf="activeTab === 'recommendations'"
+      [activeLevels]="activeLevels"
+      [missingCount]="missingCount"
+    ></app-recommendations>
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast" [class.visible]="savedToast">
+    ✅ Progress saved!
+  </div>
+</div>

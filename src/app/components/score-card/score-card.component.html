@@ -1,0 +1,53 @@
+<div class="score-card" *ngIf="score">
+  <div class="score-grid">
+    <div class="level-card l1">
+      <div class="level-header">
+        <span class="level-badge">L1</span>
+        <span class="level-name">Basic</span>
+      </div>
+      <div class="level-stats">
+        <span class="level-count">{{ score.byLevel.L1.checked }}/{{ score.byLevel.L1.total }}</span>
+        <div class="level-bar">
+          <div class="level-fill" [style.width.%]="getLevelPct('L1')"></div>
+        </div>
+        <span class="level-pct">{{ getLevelPct('L1') }}%</span>
+      </div>
+    </div>
+
+    <div class="level-card l2">
+      <div class="level-header">
+        <span class="level-badge">L2</span>
+        <span class="level-name">Standard</span>
+      </div>
+      <div class="level-stats">
+        <span class="level-count">{{ score.byLevel.L2.checked }}/{{ score.byLevel.L2.total }}</span>
+        <div class="level-bar">
+          <div class="level-fill" [style.width.%]="getLevelPct('L2')"></div>
+        </div>
+        <span class="level-pct">{{ getLevelPct('L2') }}%</span>
+      </div>
+    </div>
+
+    <div class="level-card l3">
+      <div class="level-header">
+        <span class="level-badge">L3</span>
+        <span class="level-name">Advanced</span>
+      </div>
+      <div class="level-stats">
+        <span class="level-count">{{ score.byLevel.L3.checked }}/{{ score.byLevel.L3.total }}</span>
+        <div class="level-bar">
+          <div class="level-fill" [style.width.%]="getLevelPct('L3')"></div>
+        </div>
+        <span class="level-pct">{{ getLevelPct('L3') }}%</span>
+      </div>
+    </div>
+
+    <div class="missing-card">
+      <span class="missing-icon">⚠️</span>
+      <div>
+        <div class="missing-count">{{ score.total - score.checked }}</div>
+        <div class="missing-label">Missing Controls</div>
+      </div>
+    </div>
+  </div>
+</div>

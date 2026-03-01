@@ -1,0 +1,121 @@
+.score-card {
+  padding: 16px 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.level-card {
+  background: var(--surface-dark);
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+
+    .level-badge {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .level-name {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+  }
+
+  .level-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .level-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      min-width: 40px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .level-bar {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+
+      .level-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.6s ease;
+      }
+    }
+
+    .level-pct {
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 35px;
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  }
+
+  &.l1 {
+    .level-badge { background: rgba(22,163,74,0.1); color: #16a34a; }
+    .level-fill { background: #16a34a; }
+    .level-pct { color: #16a34a; }
+  }
+  &.l2 {
+    .level-badge { background: rgba(217,119,6,0.1); color: #d97706; }
+    .level-fill { background: #d97706; }
+    .level-pct { color: #d97706; }
+  }
+  &.l3 {
+    .level-badge { background: rgba(220,38,38,0.1); color: #dc2626; }
+    .level-fill { background: #dc2626; }
+    .level-pct { color: #dc2626; }
+  }
+}
+
+.missing-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(220,38,38,0.05);
+  border: 1px solid rgba(220,38,38,0.15);
+  border-radius: 10px;
+  padding: 14px 20px;
+
+  .missing-icon { font-size: 22px; }
+  .missing-count {
+    font-size: 26px;
+    font-weight: 800;
+    color: #dc2626;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+  }
+  .missing-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+}
